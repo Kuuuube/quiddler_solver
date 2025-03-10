@@ -30,6 +30,7 @@ pub fn get_quiddler_letters(quiddler_string: &str) -> QuiddlerLetters {
         &filtered_letters_string,
         vec!["board.loadCards(", ")", "\\", "\""],
     )
+    .to_lowercase()
     .split(",")
     .map(|x| x.to_owned())
     .collect();
