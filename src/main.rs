@@ -11,34 +11,36 @@ fn main() {
         .as_str()
         .to_string();
 
-    let quiddler_game_dictionary_str_regex = Regex::new(r"dictionary\.init\(.*?\)").unwrap();
-    let quiddler_game_dictionary = parse_quiddler_dictionary(
-        quiddler_game_dictionary_str_regex
-            .find(&quiddler_game_init_str)
-            .unwrap()
-            .as_str(),
-    );
-
-    let quiddler_game_letters_str_regex = Regex::new(r"board\.loadCards\(.*?\)").unwrap();
-    let quiddler_game_letters = parse_quiddler_letters(
-        quiddler_game_letters_str_regex
-            .find(&quiddler_game_init_str)
-            .unwrap()
-            .as_str(),
-    );
+    let quiddler_game_dictionary = get_quiddler_dictionary(&quiddler_game_init_str);
+    let quiddler_game_letters = get_quiddler_letters(&quiddler_game_init_str);
 }
 
-fn parse_quiddler_dictionary(dictionary_string: &str) -> Vec<String> {
-    return remove_all(dictionary_string, vec!["dictionary.init(", ")", "\\", "\""])
-        .split(",")
-        .map(|x| x.to_owned())
-        .collect();
+fn get_quiddler_dictionary(quiddler_string: &str) -> Vec<String> {
+    let quiddler_dictionary_str_regex = Regex::new(r"dictionary\.init\(.*?\)").unwrap();
+    let quiddler_dictionary_string = quiddler_dictionary_str_regex
+        .find(&quiddler_string)
+        .unwrap()
+        .as_str();
+
+    return remove_all(
+        quiddler_dictionary_string,
+        vec!["dictionary.init(", ")", "\\", "\""],
+    )
+    .split(",")
+    .map(|x| x.to_owned())
+    .collect();
 }
 
-fn parse_quiddler_letters(letters_string: &str) -> QuiddlerLetters {
+fn get_quiddler_letters(quiddler_string: &str) -> QuiddlerLetters {
+    let quiddler_letters_str_regex = Regex::new(r"board\.loadCards\(.*?\)").unwrap();
+    let quiddler_letters = quiddler_letters_str_regex
+        .find(&quiddler_string)
+        .unwrap()
+        .as_str();
+
     let scores_removing_regex = Regex::new(r#"\",\d+,\""#).unwrap();
     let filtered_letters_string = scores_removing_regex
-        .replace_all(letters_string, ",")
+        .replace_all(quiddler_letters, ",")
         .into_owned();
 
     let letters_vec: Vec<String> = remove_all(
