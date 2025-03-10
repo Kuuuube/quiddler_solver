@@ -12,7 +12,9 @@ fn main() {
         .to_string();
 
     let quiddler_game_dictionary = get_quiddler_dictionary(&quiddler_game_init_str);
+    println!("Parsed Quiddler game dictionary. Found {} words.", quiddler_game_dictionary.len());
     let quiddler_game_letters = get_quiddler_letters(&quiddler_game_init_str);
+    println!("Parsed Quiddler game Letters. Visible: {}. Hidden: {}.", quiddler_game_letters.visible.join(","), quiddler_game_letters.hidden.join(","));
 }
 
 fn get_quiddler_dictionary(quiddler_string: &str) -> Vec<String> {
