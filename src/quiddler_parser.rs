@@ -41,6 +41,29 @@ pub fn get_quiddler_letters(quiddler_string: &str) -> QuiddlerLetters {
     };
 }
 
+pub fn get_quiddler_letter_scores(quiddler_string: &str) -> std::collections::HashMap<String, i32> {
+    let quiddler_letters_str_regex = regex::Regex::new(r"board\.loadCards\(.*?\)").unwrap();
+    let quiddler_letters = quiddler_letters_str_regex
+        .find(&quiddler_string)
+        .unwrap()
+        .as_str();
+
+    let letters_hashmap: std::collections::HashMap<String, i32> = remove_all(
+        &quiddler_letters,
+        vec!["board.loadCards(", ")", "\\", ",\"\""],
+    )
+    .to_lowercase()
+    .split(",\"")
+    .map(|x| {
+        let cleaned_string = x.replace("\"", "");
+        let letter_and_score = cleaned_string.split_once(",").unwrap_or_default();
+        return (letter_and_score.0.to_string(), letter_and_score.1.parse::<i32>().unwrap_or_default());
+    })
+    .collect();
+
+    return letters_hashmap;
+}
+
 pub fn remove_all(input_string: &str, strings_to_remove: Vec<&str>) -> String {
     let mut output_string: String = input_string.to_string();
     for string_to_remove in strings_to_remove {
