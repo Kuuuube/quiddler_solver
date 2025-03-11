@@ -3,6 +3,7 @@ use std::io::Write;
 mod quiddler_parser;
 mod quiddler_solver;
 mod game_scorer;
+mod double_letters;
 
 fn main() {
     let quiddler_game_html = std::fs::read_to_string("puzzle").unwrap();

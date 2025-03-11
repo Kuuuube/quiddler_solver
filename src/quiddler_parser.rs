@@ -32,7 +32,7 @@ pub fn get_quiddler_letters(quiddler_string: &str) -> QuiddlerLetters {
     )
     .to_lowercase()
     .split(",")
-    .map(String::from)
+    .map(|x| crate::double_letters::get_double_letter_symbol(x).to_string())
     .collect();
 
     return QuiddlerLetters {
