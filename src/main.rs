@@ -25,10 +25,14 @@ fn main() {
         quiddler_game_letters.hidden.join(",")
     );
 
+    let games_output_file_path = "quiddler_games";
+    let mut games_output_file = std::fs::OpenOptions::new().create(true).write(true).truncate(true).open(games_output_file_path).expect("Couldn't open output file `quiddler_games`.");
+
     quiddler_solver::calculate_solutions(
         quiddler_game_letters,
         quiddler_game_dictionary,
         0,
         vec![],
+        &mut games_output_file,
     );
 }

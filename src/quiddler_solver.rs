@@ -1,3 +1,5 @@
+use std::io::Write;
+
 use crate::quiddler_parser::QuiddlerLetters;
 
 const USED_LETTER_PLACEHOLDER: &str = "-";
@@ -8,23 +10,26 @@ pub fn calculate_solutions(
     dictionary: Vec<String>,
     current_wordcount: i32,
     previous_words: Vec<String>,
+    output_file: &mut std::fs::File,
 ) {
     let possible_words = get_possible_words(&letters.visible, &dictionary);
     if current_wordcount >= MAXIMUM_POSSIBLE_WORDCOUNT || possible_words.len() == 0 {
         if letters.visible.join("").replace("-", "").len() == 0 {
-            println!("Solved! {}", previous_words.join(","));
+            let success_message = format!("Solved! {}\n", previous_words.join(","));
+            let _ = output_file.write(success_message.as_bytes());
         } else {
             let remaining_letters = format!(
                 "{}{}",
                 letters.visible.join("").replace("-", ""),
                 letters.hidden.join("").replace("-", "")
             );
-            println!(
-                "Failed. {} | Remaining letters: {} | Remaining letters count: {}",
+            let fail_message = format!(
+                "Failed. {} | Remaining letters: {} | Remaining letters count: {}\n",
                 previous_words.join(","),
                 remaining_letters,
                 remaining_letters.len()
             );
+            let _ = output_file.write(fail_message.as_bytes());
         }
         return;
     }
@@ -32,7 +37,7 @@ pub fn calculate_solutions(
     let mut i = 1;
     for possible_word in &possible_words {
         if current_wordcount == 0 {
-            println!("{}/{}", i, possible_words.len());
+            println!("{}/{} possible game branches finished", i, possible_words.len());
             i += 1;
         }
         let mut working_letters = letters.clone();
@@ -50,6 +55,7 @@ pub fn calculate_solutions(
             dictionary.clone(),
             current_wordcount + 1,
             [previous_words.clone(), vec![possible_word.to_string()]].concat(),
+            output_file,
         );
     }
 }
