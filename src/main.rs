@@ -1,5 +1,3 @@
-use std::io::Write;
-
 mod double_letters;
 mod game_scorer;
 mod quiddler_parser;
@@ -53,31 +51,14 @@ fn main() {
     println!("Brute forced all solutions in: {calculate_solutions_time_elapsed:.6?}");
 
     let calculate_scores_start_time = std::time::Instant::now();
-    let scored_games =
-        game_scorer::calculate_game_scores(quiddler_game_letter_scores, games_output_file_path);
+
+    let scored_games_output_file_path = "quiddler_games_scored";
+    let scored_games_count =
+        game_scorer::calculate_game_scores(quiddler_game_letter_scores, games_output_file_path, scored_games_output_file_path);
+
     let calculate_scores_time_elapsed = calculate_scores_start_time.elapsed();
     println!(
         "Calculated scores of {} games in {calculate_scores_time_elapsed:.6?}",
-        scored_games.len()
+        scored_games_count
     );
-
-    let scored_games_output_file_path = "quiddler_games_scored";
-    let mut scored_games_output_file = std::fs::OpenOptions::new()
-        .create(true)
-        .write(true)
-        .truncate(true)
-        .open(scored_games_output_file_path)
-        .expect("Couldn't open output file `quiddler_games_scored`.");
-
-    for game in scored_games {
-        let _ = scored_games_output_file.write(
-            double_letters::replace_all_double_letter_symbols(format!(
-                "Words: {} | Remaining Letters: {} | Score: {}\n",
-                game.words.join(","),
-                game.remaining_letters.join(","),
-                game.score.unwrap_or_default()
-            ))
-            .as_bytes(),
-        );
-    }
 }

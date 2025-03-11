@@ -1,9 +1,26 @@
+use std::io::{BufRead, Write};
+
+use crate::double_letters;
+
 pub fn calculate_game_scores(
     letter_scores: std::collections::HashMap<String, i32>,
     games_output_file_path: &str,
-) -> Vec<QuiddlerGame> {
-    let mut quiddler_games = get_games(games_output_file_path);
-    for game in &mut quiddler_games {
+    scored_games_output_file_path: &str,
+) -> i32 {
+    let quiddler_games_file = std::fs::File::open(games_output_file_path).unwrap();
+    let line_reader = std::io::BufReader::new(quiddler_games_file);
+
+    let mut scored_games_output_file = std::fs::OpenOptions::new()
+        .create(true)
+        .write(true)
+        .truncate(true)
+        .open(scored_games_output_file_path)
+        .expect("Couldn't open output file `quiddler_games_scored`.");
+
+    let mut games_count = 0;
+
+    for line in line_reader.lines() {
+        let game = get_game(line.unwrap());
         let mut score = 0;
         for word in &game.words {
             for letter in word.chars() {
@@ -24,35 +41,31 @@ pub fn calculate_game_scores(
                 .get(&remaining_letter.to_string())
                 .unwrap_or_else(|| &0);
         }
-        game.score = Some(score);
+        let game_score = score;
+        let _ = scored_games_output_file.write(
+            double_letters::replace_all_double_letter_symbols(format!(
+                "Words: {} | Remaining Letters: {} | Score: {}\n",
+                game.words.join(","),
+                game.remaining_letters.join(","),
+                game_score
+            ))
+            .as_bytes(),
+        );
+        games_count += 1;
     }
-    // Highest to lowest score
-    quiddler_games.sort_by(|a, b| (&b.score).cmp(&a.score));
-    return quiddler_games;
+    return games_count;
 }
 
-fn get_games(games_output_file_path: &str) -> Vec<QuiddlerGame> {
-    let mut games_without_score: Vec<QuiddlerGame> = vec![];
-    let games_file_lines: Vec<String> = std::fs::read_to_string(games_output_file_path)
-        .unwrap()
-        .lines()
-        .map(String::from)
-        .collect();
-    for game_string in games_file_lines {
-        let game_string_split = match game_string.split_once("|") {
-            Some(some) => some,
-            None => continue,
-        };
-        let words = game_string_split.0.split(",").map(String::from).collect();
-        let remaining_letters: Vec<String> =
-            game_string_split.1.split(",").map(String::from).collect();
-        games_without_score.push(QuiddlerGame {
-            words,
-            remaining_letters,
-            score: None,
-        });
-    }
-    return games_without_score;
+fn get_game(game_string: String) -> QuiddlerGame {
+    let game_string_split = game_string.split_once("|").unwrap();
+    let words = game_string_split.0.split(",").map(String::from).collect();
+    let remaining_letters: Vec<String> =
+        game_string_split.1.split(",").map(String::from).collect();
+    return QuiddlerGame {
+        words,
+        remaining_letters,
+        score: None,
+    };
 }
 
 #[derive(Debug)]
