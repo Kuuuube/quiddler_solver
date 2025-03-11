@@ -65,7 +65,7 @@ fn get_possible_words(visible_letters: &Vec<String>, dictionary: &Vec<String>) -
         let mut working_word = word.clone();
         for letter in &working_visible_letters {
             if working_word.contains(letter) {
-                working_word = working_word.replace(letter, "");
+                working_word = working_word.replacen(letter, "", 1);
             }
         }
         if working_word.len() == 0 {
