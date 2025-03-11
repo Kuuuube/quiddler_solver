@@ -58,20 +58,13 @@ pub fn calculate_solutions(
 fn get_possible_words(visible_letters: &Vec<String>, dictionary: &Vec<String>) -> Vec<String> {
     let mut new_dictionary = vec![];
     for word in dictionary {
-        let mut valid_word = true;
-        let mut working_visible_letters = visible_letters.clone();
-        for char in word.chars() {
-            if !working_visible_letters.contains(&char.to_string()) {
-                valid_word = false;
-                break;
+        let mut working_word = word.clone();
+        for letter in visible_letters {
+            if working_word.contains(letter) {
+                working_word = working_word.replace(letter, "");
             }
-            let letter_index = working_visible_letters
-                .iter()
-                .position(|x| *x == char.to_string())
-                .unwrap();
-            working_visible_letters[letter_index] = USED_LETTER_PLACEHOLDER.to_string();
         }
-        if valid_word {
+        if working_word.len() == 0 {
             new_dictionary.push(word.to_string());
         }
     }
