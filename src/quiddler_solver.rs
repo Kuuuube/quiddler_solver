@@ -15,7 +15,7 @@ pub fn calculate_solutions(
     let possible_words = get_possible_words(&letters.visible, &dictionary);
     if current_wordcount >= MAXIMUM_POSSIBLE_WORDCOUNT || possible_words.len() == 0 {
         if letters.visible.join("").replace("-", "").len() == 0 {
-            let success_message = format!("Solved! {}\n", previous_words.join(","));
+            let success_message = format!("{}|\n", previous_words.join(","));
             let _ = output_file.write(success_message.as_bytes());
         } else {
             let remaining_letters = format!(
@@ -24,10 +24,9 @@ pub fn calculate_solutions(
                 letters.hidden.join("").replace("-", "")
             );
             let fail_message = format!(
-                "Failed. {} | Remaining letters: {} | Remaining letters count: {}\n",
+                "{}|{}\n",
                 previous_words.join(","),
                 remaining_letters,
-                remaining_letters.len()
             );
             let _ = output_file.write(fail_message.as_bytes());
         }
