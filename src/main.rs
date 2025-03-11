@@ -55,6 +55,6 @@ fn main() {
     let mut scored_games_output_file = std::fs::OpenOptions::new().create(true).write(true).truncate(true).open(scored_games_output_file_path).expect("Couldn't open output file `quiddler_games_scored`.");
 
     for game in scored_games {
-        let _ = scored_games_output_file.write(format!("Words: {} | Remaining Letters: {} | Score: {}\n", game.words.join(","), game.remaining_letters.join(","), game.score.unwrap_or_default()).as_bytes());
+        let _ = scored_games_output_file.write(double_letters::replace_all_double_letter_symbols(format!("Words: {} | Remaining Letters: {} | Score: {}\n", game.words.join(","), game.remaining_letters.join(","), game.score.unwrap_or_default())).as_bytes());
     }
 }

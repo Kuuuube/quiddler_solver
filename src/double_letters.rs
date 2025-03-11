@@ -21,3 +21,7 @@ pub fn get_double_letter_from_symbol(letter: &str) -> &str {
         _ => letter
     }
 }
+
+pub fn replace_all_double_letter_symbols(input_string: String) -> String {
+    return input_string.replace("!", "er").replace("@", "cl").replace("#", "in").replace("$", "th").replace("%", "qu")
+}
