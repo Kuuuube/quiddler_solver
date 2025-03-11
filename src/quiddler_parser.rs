@@ -5,13 +5,24 @@ pub fn get_quiddler_dictionary(quiddler_string: &str) -> Vec<String> {
         .unwrap()
         .as_str();
 
-    return remove_all(
+    let mut quiddler_dictionary: Vec<String> = remove_all(
         quiddler_dictionary_string,
         vec!["dictionary.init(", ")", "\\", "\""],
     )
     .split(",")
     .map(String::from)
     .collect();
+
+    // Only single occurrances of double letters are handled here
+    for word in quiddler_dictionary.clone() {
+        for double_letter in crate::double_letters::POSSIBLE_DOUBLE_LETTERS {
+            if word.contains(double_letter) {
+                quiddler_dictionary.push(word.replace(double_letter, crate::double_letters::get_double_letter_symbol(double_letter)));
+            }
+        }
+    }
+
+    return quiddler_dictionary;
 }
 
 pub fn get_quiddler_letters(quiddler_string: &str) -> QuiddlerLetters {
