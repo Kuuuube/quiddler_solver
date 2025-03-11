@@ -17,7 +17,10 @@ pub fn get_quiddler_dictionary(quiddler_string: &str) -> Vec<String> {
     for word in quiddler_dictionary.clone() {
         for double_letter in crate::double_letters::POSSIBLE_DOUBLE_LETTERS {
             if word.contains(double_letter) {
-                quiddler_dictionary.push(word.replace(double_letter, crate::double_letters::get_double_letter_symbol(double_letter)));
+                quiddler_dictionary.push(word.replace(
+                    double_letter,
+                    crate::double_letters::get_double_letter_symbol(double_letter),
+                ));
             }
         }
     }
@@ -68,7 +71,10 @@ pub fn get_quiddler_letter_scores(quiddler_string: &str) -> std::collections::Ha
     .map(|x| {
         let cleaned_string = x.replace("\"", "");
         let letter_and_score = cleaned_string.split_once(",").unwrap_or_default();
-        return (crate::double_letters::get_double_letter_symbol(letter_and_score.0).to_string(), letter_and_score.1.parse::<i32>().unwrap_or_default());
+        return (
+            crate::double_letters::get_double_letter_symbol(letter_and_score.0).to_string(),
+            letter_and_score.1.parse::<i32>().unwrap_or_default(),
+        );
     })
     .collect();
 

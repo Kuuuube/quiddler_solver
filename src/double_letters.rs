@@ -7,8 +7,8 @@ pub fn get_double_letter_symbol(letter: &str) -> &str {
         "in" => "#",
         "th" => "$",
         "qu" => "%",
-        _ => letter
-    }
+        _ => letter,
+    };
 }
 
 // pub fn get_double_letter_from_symbol(letter: &str) -> &str {
@@ -23,5 +23,10 @@ pub fn get_double_letter_symbol(letter: &str) -> &str {
 // }
 
 pub fn replace_all_double_letter_symbols(input_string: String) -> String {
-    return input_string.replace("!", "er").replace("@", "cl").replace("#", "in").replace("$", "th").replace("%", "qu")
+    return input_string
+        .replace("!", "er")
+        .replace("@", "cl")
+        .replace("#", "in")
+        .replace("$", "th")
+        .replace("%", "qu");
 }

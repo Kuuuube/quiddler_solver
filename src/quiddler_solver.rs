@@ -18,12 +18,14 @@ pub fn calculate_solutions(
             let success_message = format!("{}|\n", previous_words.join(","));
             let _ = output_file.write(success_message.as_bytes());
         } else {
-            let remaining_letters = [letters.visible, letters.hidden].concat().iter().filter(|x| *x != "-").map(String::from).collect::<Vec<String>>().join(",");
-            let fail_message = format!(
-                "{}|{}\n",
-                previous_words.join(","),
-                remaining_letters,
-            );
+            let remaining_letters = [letters.visible, letters.hidden]
+                .concat()
+                .iter()
+                .filter(|x| *x != "-")
+                .map(String::from)
+                .collect::<Vec<String>>()
+                .join(",");
+            let fail_message = format!("{}|{}\n", previous_words.join(","), remaining_letters,);
             let _ = output_file.write(fail_message.as_bytes());
         }
         return;
@@ -32,7 +34,11 @@ pub fn calculate_solutions(
     let mut i = 1;
     for possible_word in &possible_words {
         if current_wordcount == 0 {
-            println!("{}/{} possible game branches finished", i, possible_words.len());
+            println!(
+                "{}/{} possible game branches finished",
+                i,
+                possible_words.len()
+            );
             i += 1;
         }
         let mut working_letters = letters.clone();
