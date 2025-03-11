@@ -64,12 +64,9 @@ pub fn calculate_solutions(
 fn get_possible_words(visible_letters: &Vec<String>, dictionary: &Vec<String>) -> Vec<String> {
     let mut new_dictionary = vec![];
 
-    let mut working_visible_letters = visible_letters.clone();
-    working_visible_letters.sort_by(|a, b| (b.len()).cmp(&a.len())); //double letters must always be checked first if possible
-
     for word in dictionary {
         let mut working_word = word.clone();
-        for letter in &working_visible_letters {
+        for letter in visible_letters {
             if working_word.contains(letter) {
                 working_word = working_word.replacen(letter, "", 1);
             }
