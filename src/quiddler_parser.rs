@@ -10,7 +10,7 @@ pub fn get_quiddler_dictionary(quiddler_string: &str) -> Vec<String> {
         vec!["dictionary.init(", ")", "\\", "\""],
     )
     .split(",")
-    .map(|x| x.to_owned())
+    .map(String::from)
     .collect();
 }
 
@@ -32,7 +32,7 @@ pub fn get_quiddler_letters(quiddler_string: &str) -> QuiddlerLetters {
     )
     .to_lowercase()
     .split(",")
-    .map(|x| x.to_owned())
+    .map(String::from)
     .collect();
 
     return QuiddlerLetters {
