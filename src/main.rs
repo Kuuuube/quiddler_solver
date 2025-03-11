@@ -28,6 +28,8 @@ fn main() {
     let games_output_file_path = "quiddler_games";
     let mut games_output_file = std::fs::OpenOptions::new().create(true).write(true).truncate(true).open(games_output_file_path).expect("Couldn't open output file `quiddler_games`.");
 
+    let calculate_solutions_start_time = std::time::Instant::now();
+
     quiddler_solver::calculate_solutions(
         quiddler_game_letters,
         quiddler_game_dictionary,
@@ -35,4 +37,7 @@ fn main() {
         vec![],
         &mut games_output_file,
     );
+
+    let calculate_solutions_time_elapsed = calculate_solutions_start_time.elapsed();
+    println!("Brute forced all solutions in: {calculate_solutions_time_elapsed:.6?}");
 }
