@@ -68,7 +68,7 @@ pub fn get_quiddler_letter_scores(quiddler_string: &str) -> std::collections::Ha
     .map(|x| {
         let cleaned_string = x.replace("\"", "");
         let letter_and_score = cleaned_string.split_once(",").unwrap_or_default();
-        return (letter_and_score.0.to_string(), letter_and_score.1.parse::<i32>().unwrap_or_default());
+        return (crate::double_letters::get_double_letter_symbol(letter_and_score.0).to_string(), letter_and_score.1.parse::<i32>().unwrap_or_default());
     })
     .collect();
 
