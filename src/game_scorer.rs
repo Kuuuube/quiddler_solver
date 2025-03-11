@@ -35,7 +35,7 @@ fn get_games(games_output_file_path: &str) -> Vec<QuiddlerGame> {
             None => continue,
         };
         let words = game_string_split.0.split(",").map(String::from).collect();
-        let remaining_letters: Vec<String> = game_string_split.1.chars().map(String::from).collect();
+        let remaining_letters: Vec<String> = game_string_split.1.split(",").map(String::from).collect();
         games_without_score.push(QuiddlerGame { words, remaining_letters, score: None });
     }
     return games_without_score;

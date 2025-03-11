@@ -18,11 +18,7 @@ pub fn calculate_solutions(
             let success_message = format!("{}|\n", previous_words.join(","));
             let _ = output_file.write(success_message.as_bytes());
         } else {
-            let remaining_letters = format!(
-                "{}{}",
-                letters.visible.join("").replace("-", ""),
-                letters.hidden.join("").replace("-", "")
-            );
+            let remaining_letters = [letters.visible, letters.hidden].concat().iter().filter(|x| *x != "-").map(String::from).collect::<Vec<String>>().join(",");
             let fail_message = format!(
                 "{}|{}\n",
                 previous_words.join(","),
