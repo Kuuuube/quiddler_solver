@@ -4,7 +4,9 @@ Brute forces all possible solutions of the [Quiddler Puzzle](https://www.setgame
 
 ## Usage
 
-1. Download the quiddler puzzle html page. `get_latest_puzzle.sh` is provided to do this automatically.
+1. Download the quiddler puzzle html page. It must be named `puzzle` and placed next to `quiddler_solver`.
+
+    `get_latest_puzzle.sh` is provided to do this automatically.
 
 2. Run `quiddler_solver` (or `cargo run --release` if running from source).
 
