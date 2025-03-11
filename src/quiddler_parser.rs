@@ -13,6 +13,9 @@ pub fn get_quiddler_dictionary(quiddler_string: &str) -> Vec<String> {
     .map(String::from)
     .collect();
 
+    quiddler_dictionary.sort();
+    quiddler_dictionary.dedup();
+
     // Only single occurrances of double letters are handled here
     for word in quiddler_dictionary.clone() {
         for double_letter in crate::double_letters::POSSIBLE_DOUBLE_LETTERS {
