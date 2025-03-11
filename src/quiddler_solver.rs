@@ -66,12 +66,14 @@ fn get_possible_words(visible_letters: &Vec<String>, dictionary: &Vec<String>) -
 
     for word in dictionary {
         let mut working_word = word.clone();
+        let mut letter_count = 0;
         for letter in visible_letters {
             if working_word.contains(letter) {
                 working_word = working_word.replacen(letter, "", 1);
+                letter_count += 1;
             }
         }
-        if working_word.len() == 0 {
+        if working_word.len() == 0 && letter_count > 1 {
             new_dictionary.push(word.to_string());
         }
     }
