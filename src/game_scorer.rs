@@ -6,6 +6,15 @@ pub fn calculate_game_scores(letter_scores: std::collections::HashMap<String, i3
             for letter in word.chars() {
                 score += letter_scores.get(&letter.to_string()).unwrap_or_else(|| &0);
             }
+            match word.len() {
+                5 => { score += 2 },
+                6 => { score += 5 },
+                7 => { score += 10 },
+                8 => { score += 20 },
+                9 => { score += 30 },
+                10 => { score += 40 },
+                _ => {}
+            }
         }
         for remaining_letter in &game.remaining_letters {
             score -= letter_scores.get(&remaining_letter.to_string()).unwrap_or_else(|| &0);
