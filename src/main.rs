@@ -43,7 +43,7 @@ fn main() {
 
     quiddler_solver::calculate_solutions(
         quiddler_game_letters,
-        quiddler_game_dictionary,
+        &quiddler_game_dictionary,
         0,
         vec![],
         &mut games_output_file,

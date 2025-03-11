@@ -7,7 +7,7 @@ const MAXIMUM_POSSIBLE_WORDCOUNT: i32 = 8;
 
 pub fn calculate_solutions(
     letters: QuiddlerLetters,
-    dictionary: Vec<String>,
+    dictionary: &Vec<String>,
     current_wordcount: i32,
     previous_words: Vec<String>,
     output_file: &mut std::fs::File,
@@ -53,7 +53,7 @@ pub fn calculate_solutions(
         }
         calculate_solutions(
             working_letters,
-            dictionary.clone(),
+            dictionary,
             current_wordcount + 1,
             [previous_words.clone(), vec![possible_word.to_string()]].concat(),
             output_file,
