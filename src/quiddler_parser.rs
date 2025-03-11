@@ -49,6 +49,7 @@ pub fn remove_all(input_string: &str, strings_to_remove: Vec<&str>) -> String {
     return output_string;
 }
 
+#[derive(Debug, Clone)]
 pub struct QuiddlerLetters {
     pub visible: Vec<String>,
     pub hidden: Vec<String>,
