@@ -18,6 +18,18 @@ Brute forces all possible solutions of the [Quiddler Puzzle](https://www.setgame
 
 - Some potential game states can be missed if there are duplicate letters on the top level of cards or duplicate letters on the top and bottom level at the same time. Duplicates in the bottom level are handled fully. Double letters are also handled fully.
 
+- In `quiddler_games` output, double letters are replaces with symbols.
+
+    - `!` = `er`
+
+    - `@` = `cl`
+
+    - `#` = `in`
+
+    - `$` = `th`
+
+    - `%` = `qu`
+
 - In the `quiddler_games_scored` output, double letters are denoted by being capital.
 
     For example: the word `begin` from `b` `e` `g` `in` will be `begIN` but `b` `e` `g` `i` `n` will be `begin`.
