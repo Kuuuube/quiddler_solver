@@ -1,3 +1,5 @@
+use std::collections::HashMap;
+
 pub fn get_quiddler_dictionary(quiddler_string: &str) -> Vec<String> {
     let quiddler_dictionary_str_regex = regex::Regex::new(r"dictionary\.init\(.*?\)").unwrap();
     let quiddler_dictionary_string = quiddler_dictionary_str_regex
@@ -52,9 +54,14 @@ pub fn get_quiddler_letters(quiddler_string: &str) -> QuiddlerLetters {
     .map(|x| crate::double_letters::get_double_letter_symbol(x).to_string())
     .collect();
 
+    let mut hidden_letters_hashmap: HashMap<usize, String> = HashMap::new();
+    for (i, letter) in letters_vec[8..=15].iter().enumerate() {
+        hidden_letters_hashmap.insert(i, letter.to_string());
+    }
+
     return QuiddlerLetters {
         visible: letters_vec[0..8].to_vec(),
-        hidden: letters_vec[8..=15].to_vec(),
+        hidden: hidden_letters_hashmap,
     };
 }
 
@@ -95,5 +102,5 @@ pub fn remove_all(input_string: &str, strings_to_remove: Vec<&str>) -> String {
 #[derive(Debug, Clone)]
 pub struct QuiddlerLetters {
     pub visible: Vec<String>,
-    pub hidden: Vec<String>,
+    pub hidden: HashMap<usize, String>,
 }

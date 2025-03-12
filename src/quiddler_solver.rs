@@ -18,7 +18,7 @@ pub fn calculate_solutions(
             let success_message = format!("{}|\n", previous_words.join(","));
             let _ = output_file.write(success_message.as_bytes());
         } else {
-            let remaining_letters = [letters.visible, letters.hidden]
+            let remaining_letters = [letters.visible, letters.hidden.values().map(String::from).collect::<Vec<String>>()]
                 .concat()
                 .iter()
                 .filter(|x| *x != "-")
@@ -85,8 +85,14 @@ fn repopulate_visible_letters(input_letters: QuiddlerLetters) -> QuiddlerLetters
     let mut i: usize = 0;
     while i < input_letters.visible.len() {
         if input_letters.visible.get(i).unwrap() == USED_LETTER_PLACEHOLDER {
-            output_letters.visible[i] = output_letters.hidden[i].clone();
-            output_letters.hidden[i] = USED_LETTER_PLACEHOLDER.to_string();
+            let hidden_letter = output_letters.hidden.get(&i);
+            output_letters.visible[i] = match hidden_letter {
+                Some(some) => {
+                    some.to_string()
+                },
+                None => "-".to_string(),
+            };
+            output_letters.hidden.remove(&i);
         }
         i += 1;
     }
