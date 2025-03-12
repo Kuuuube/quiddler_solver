@@ -18,13 +18,20 @@ pub fn calculate_solutions(
             let success_message = format!("{}|\n", previous_words.join(","));
             let _ = output_file.write(success_message.as_bytes());
         } else {
-            let remaining_letters = [letters.visible, letters.hidden.values().map(String::from).collect::<Vec<String>>()]
-                .concat()
-                .iter()
-                .filter(|x| *x != "-")
-                .map(String::from)
-                .collect::<Vec<String>>()
-                .join(",");
+            let remaining_letters = [
+                letters.visible,
+                letters
+                    .hidden
+                    .values()
+                    .map(String::from)
+                    .collect::<Vec<String>>(),
+            ]
+            .concat()
+            .iter()
+            .filter(|x| *x != "-")
+            .map(String::from)
+            .collect::<Vec<String>>()
+            .join(",");
             let fail_message = format!("{}|{}\n", previous_words.join(","), remaining_letters,);
             let _ = output_file.write(fail_message.as_bytes());
         }
@@ -91,8 +98,9 @@ fn repopulate_visible_letters(input_letters: QuiddlerLetters) -> QuiddlerLetters
                 Some(some) => {
                     indexes_to_remove.push(i);
                     some.to_string()
-                },
-                None => { // Move hidden letter to spot without any cards on it
+                }
+                None => {
+                    // Move hidden letter to spot without any cards on it
                     let mut new_letter = "-".to_string();
                     for (i, letter) in &output_letters.hidden {
                         indexes_to_remove.push(*i);
@@ -100,7 +108,7 @@ fn repopulate_visible_letters(input_letters: QuiddlerLetters) -> QuiddlerLetters
                         break;
                     }
                     new_letter
-                },
+                }
             };
             for index in indexes_to_remove {
                 output_letters.hidden.remove(&index);

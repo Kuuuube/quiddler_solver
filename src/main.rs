@@ -26,7 +26,12 @@ fn main() {
     println!(
         "Parsed Quiddler game Letters. Visible: {}. Hidden: {}.",
         quiddler_game_letters.visible.join(","),
-        quiddler_game_letters.hidden.values().map(String::from).collect::<Vec<String>>().join(",")
+        quiddler_game_letters
+            .hidden
+            .values()
+            .map(String::from)
+            .collect::<Vec<String>>()
+            .join(",")
     );
     let quiddler_game_letter_scores =
         quiddler_parser::get_quiddler_letter_scores(&quiddler_game_init_str);
