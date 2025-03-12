@@ -99,6 +99,22 @@ pub fn remove_all(input_string: &str, strings_to_remove: Vec<&str>) -> String {
     return output_string;
 }
 
+pub fn get_visible_letters_row(visible_letters: &Vec<String>, row: i32) -> String {
+    return match row {
+        1 => visible_letters[0..4]
+            .iter()
+            .map(String::from)
+            .collect::<Vec<String>>()
+            .join(" "),
+        2 => visible_letters[4..8]
+            .iter()
+            .map(String::from)
+            .collect::<Vec<String>>()
+            .join(" "),
+        _ => "".to_string(),
+    };
+}
+
 #[derive(Debug, Clone)]
 pub struct QuiddlerLetters {
     pub visible: Vec<String>,

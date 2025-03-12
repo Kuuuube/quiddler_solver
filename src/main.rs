@@ -74,6 +74,22 @@ fn main() {
         .open(scored_games_output_file_path)
         .expect("Couldn't open output file `quiddler_games_scored`.");
 
+    // Header
+    let _ = scored_games_output_file.write(
+        format!(
+            "Quiddler Puzzle Letters: \nVisible | Hidden\n{} | {}\n{} | {}\n\n",
+            double_letters::replace_all_double_letter_symbols(
+                quiddler_parser::get_visible_letters_row(&quiddler_game_letters.visible, 1)
+            ),
+            "",
+            double_letters::replace_all_double_letter_symbols(
+                quiddler_parser::get_visible_letters_row(&quiddler_game_letters.visible, 2)
+            ),
+            ""
+        )
+        .as_bytes(),
+    );
+
     for game in scored_games {
         let _ = scored_games_output_file.write(
             double_letters::replace_all_double_letter_symbols(format!(

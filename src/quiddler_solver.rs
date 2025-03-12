@@ -6,7 +6,7 @@ const USED_LETTER_PLACEHOLDER: &str = "-";
 const MAXIMUM_POSSIBLE_WORDCOUNT: i32 = 8;
 
 pub fn calculate_solutions(
-    letters: QuiddlerLetters,
+    letters: &QuiddlerLetters,
     dictionary: &Vec<String>,
     current_wordcount: i32,
     previous_words: Vec<String>,
@@ -19,7 +19,7 @@ pub fn calculate_solutions(
             let _ = output_file.write(success_message.as_bytes());
         } else {
             let remaining_letters = [
-                letters.visible,
+                letters.visible.clone(),
                 letters
                     .hidden
                     .values()
@@ -59,7 +59,7 @@ pub fn calculate_solutions(
             working_letters = repopulate_visible_letters(working_letters);
         }
         calculate_solutions(
-            working_letters,
+            &working_letters,
             dictionary,
             current_wordcount + 1,
             [previous_words.clone(), vec![possible_word.to_string()]].concat(),
