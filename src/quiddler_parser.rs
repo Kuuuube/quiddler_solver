@@ -115,6 +115,32 @@ pub fn get_visible_letters_row(visible_letters: &Vec<String>, row: i32) -> Strin
     };
 }
 
+pub fn get_hidden_letters_row(visible_letters: &HashMap<usize, String>, row: i32) -> String {
+    return match row {
+        1 => {
+            let mut letters = vec![];
+            for i in 0..4 {
+                match visible_letters.get(&(i as usize)) {
+                    Some(some) => letters.push(some.to_string()),
+                    None => (),
+                };
+            }
+            letters.join(" ")
+        }
+        2 => {
+            let mut letters = vec![];
+            for i in 4..8 {
+                match visible_letters.get(&(i as usize)) {
+                    Some(some) => letters.push(some.to_string()),
+                    None => (),
+                };
+            }
+            letters.join(" ")
+        }
+        _ => "".to_string(),
+    };
+}
+
 #[derive(Debug, Clone)]
 pub struct QuiddlerLetters {
     pub visible: Vec<String>,

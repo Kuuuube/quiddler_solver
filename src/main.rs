@@ -47,7 +47,7 @@ fn main() {
     let calculate_solutions_start_time = std::time::Instant::now();
 
     quiddler_solver::calculate_solutions(
-        quiddler_game_letters,
+        &quiddler_game_letters,
         &quiddler_game_dictionary,
         0,
         vec![],
@@ -81,11 +81,15 @@ fn main() {
             double_letters::replace_all_double_letter_symbols(
                 quiddler_parser::get_visible_letters_row(&quiddler_game_letters.visible, 1)
             ),
-            "",
+            double_letters::replace_all_double_letter_symbols(
+                quiddler_parser::get_hidden_letters_row(&quiddler_game_letters.hidden, 1)
+            ),
             double_letters::replace_all_double_letter_symbols(
                 quiddler_parser::get_visible_letters_row(&quiddler_game_letters.visible, 2)
             ),
-            ""
+            double_letters::replace_all_double_letter_symbols(
+                quiddler_parser::get_hidden_letters_row(&quiddler_game_letters.hidden, 2)
+            )
         )
         .as_bytes(),
     );
