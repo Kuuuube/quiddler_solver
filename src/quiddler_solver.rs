@@ -92,7 +92,15 @@ fn repopulate_visible_letters(input_letters: QuiddlerLetters) -> QuiddlerLetters
                     indexes_to_remove.push(i);
                     some.to_string()
                 },
-                None => "-".to_string(),
+                None => { // Move hidden letter to spot without any cards on it
+                    let mut new_letter = "-".to_string();
+                    for (i, letter) in &output_letters.hidden {
+                        indexes_to_remove.push(*i);
+                        new_letter = letter.to_string();
+                        break;
+                    }
+                    new_letter
+                },
             };
             for index in indexes_to_remove {
                 output_letters.hidden.remove(&index);
