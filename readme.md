@@ -14,6 +14,14 @@ Brute forces all possible solutions of the [Quiddler Puzzle](https://www.setgame
 
 ### `quiddler_games`
 
+- Data Format:
+
+    Words (comma `,` delimited)`|`Remaining letters (comma `,` delimited)
+
+    ```
+    cog,ai,lo|g,w,r,p,v,q,m,z,x
+    ```
+
 - Double letters are replaced with symbols.
 
     - `!` = `er`
@@ -27,6 +35,28 @@ Brute forces all possible solutions of the [Quiddler Puzzle](https://www.setgame
     - `%` = `qu`
 
 ### `quiddler_games_scored`
+
+- Header:
+
+    Shows the initially visible and hidden letters included in the puzzle. This can be useful for inputting solutions where the solver has moved cards.
+
+    Example header:
+
+    ```
+    Quiddler Puzzle Letters:
+    Visible | Hidden
+    g w r p | a l g x
+    o o c z | v q i m
+
+    ```
+
+- Data Format:
+
+    `Words: `Words (comma `,` delimited)` | Remaining Letters: `Remaining letters (comma `,` delimited)` | Score: `Score integer
+
+    ```
+    Words: gorp,gov,qi,cwm,zax | Remaining Letters: l | Score: 103
+    ```
 
 - A header at the top shows the initially visible and hidden letters included in the puzzle. This can be useful for inputting solutions where the solver has moved cards.
 
