@@ -86,13 +86,17 @@ fn repopulate_visible_letters(input_letters: QuiddlerLetters) -> QuiddlerLetters
     while i < input_letters.visible.len() {
         if input_letters.visible.get(i).unwrap() == USED_LETTER_PLACEHOLDER {
             let hidden_letter = output_letters.hidden.get(&i);
+            let mut indexes_to_remove = vec![];
             output_letters.visible[i] = match hidden_letter {
                 Some(some) => {
+                    indexes_to_remove.push(i);
                     some.to_string()
                 },
                 None => "-".to_string(),
             };
-            output_letters.hidden.remove(&i);
+            for index in indexes_to_remove {
+                output_letters.hidden.remove(&index);
+            }
         }
         i += 1;
     }
