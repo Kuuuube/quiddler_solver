@@ -1,3 +1,5 @@
+use crate::double_letters;
+
 pub fn calculate_game_scores(
     letter_scores: std::collections::HashMap<String, i32>,
     games_output_file_path: &str,
@@ -9,7 +11,7 @@ pub fn calculate_game_scores(
             for letter in word.chars() {
                 score += letter_scores.get(&letter.to_string()).unwrap_or_else(|| &0);
             }
-            match word.len() {
+            match double_letters::replace_all_double_letter_symbols(word.to_string()).len() {
                 5 => score += 2,
                 6 => score += 5,
                 7 => score += 10,
