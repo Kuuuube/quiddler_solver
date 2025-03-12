@@ -12,7 +12,7 @@ Brute forces all possible solutions of the [Quiddler Puzzle](https://www.setgame
 
 ## Notes
 
-- Brute forcing can take an incredibly long time in some cases due to an enormous amount of possible solutions. Anywhere from 50,000 to upwards of 50,000,000 games could have to be calculated.
+- Brute forcing can take an incredibly long time in some cases due to an enormous amount of possible solutions. Anywhere from 50,000 to upwards of 50,000,000 games could have to be calculated. Be prepared for calculation to take hours.
 
 - Some potential game states can be missed if there are duplicate letters on the top level of cards or duplicate letters on the top and bottom level at the same time. Duplicates in the bottom level are handled fully. Double letters are also handled fully.
 
