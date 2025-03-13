@@ -65,6 +65,7 @@ fn main() {
             &quiddler_game_dictionary,
             0,
             vec![],
+            args.no_moving,
             &mut games_output_file,
         );
 

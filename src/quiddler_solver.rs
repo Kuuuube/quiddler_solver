@@ -10,6 +10,7 @@ pub fn calculate_solutions(
     dictionary: &Vec<String>,
     current_wordcount: i32,
     previous_words: Vec<String>,
+    no_moving: bool,
     output_file: &mut std::fs::File,
 ) {
     let possible_words = get_possible_words(&letters.visible, &dictionary);
@@ -64,13 +65,14 @@ pub fn calculate_solutions(
                 .position(|x| x == &char)
                 .unwrap();
             working_letters.visible[visible_letter_index] = USED_LETTER_PLACEHOLDER;
-            working_letters = repopulate_visible_letters(working_letters);
+            working_letters = repopulate_visible_letters(working_letters, no_moving);
         }
         calculate_solutions(
             &working_letters,
             dictionary,
             current_wordcount + 1,
             [previous_words.clone(), vec![possible_word.to_string()]].concat(),
+            no_moving,
             output_file,
         );
     }
@@ -96,7 +98,7 @@ fn get_possible_words(visible_letters: &Vec<char>, dictionary: &Vec<String>) -> 
     return new_dictionary;
 }
 
-fn repopulate_visible_letters(input_letters: QuiddlerLetters) -> QuiddlerLetters {
+fn repopulate_visible_letters(input_letters: QuiddlerLetters, no_moving: bool) -> QuiddlerLetters {
     let mut output_letters = input_letters.clone();
     let mut i: usize = 0;
     while i < input_letters.visible.len() {
@@ -111,10 +113,12 @@ fn repopulate_visible_letters(input_letters: QuiddlerLetters) -> QuiddlerLetters
                 None => {
                     // Move hidden letter to spot without any cards on it
                     let mut new_letter = '-';
-                    for (i, letter) in &output_letters.hidden {
-                        indexes_to_remove.push(*i);
-                        new_letter = *letter;
-                        break;
+                    if !no_moving {
+                        for (i, letter) in &output_letters.hidden {
+                            indexes_to_remove.push(*i);
+                            new_letter = *letter;
+                            break;
+                        }
                     }
                     new_letter
                 }
