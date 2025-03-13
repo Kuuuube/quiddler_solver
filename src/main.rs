@@ -1,5 +1,8 @@
 use std::io::{BufRead, Write};
 
+use game_scorer::QuiddlerGame;
+use quiddler_parser::QuiddlerLetters;
+
 mod args_parser;
 mod double_letters;
 mod game_scorer;
@@ -101,35 +104,35 @@ fn main() {
         .open(scored_games_output_file_path)
         .expect("Couldn't open output file `quiddler_games_scored`.");
 
-    // Header
-    let _ = scored_games_output_file.write(
-        format!(
-            "Quiddler Puzzle Letters: \nVisible | Hidden\n{} | {}\n{} | {}\n\n",
-            double_letters::replace_all_double_letter_symbols(
-                quiddler_parser::get_visible_letters_row(&quiddler_game_letters.visible, 1)
-            ),
-            double_letters::replace_all_double_letter_symbols(
-                quiddler_parser::get_hidden_letters_row(&quiddler_game_letters.hidden, 1)
-            ),
-            double_letters::replace_all_double_letter_symbols(
-                quiddler_parser::get_visible_letters_row(&quiddler_game_letters.visible, 2)
-            ),
-            double_letters::replace_all_double_letter_symbols(
-                quiddler_parser::get_hidden_letters_row(&quiddler_game_letters.hidden, 2)
-            )
-        )
-        .as_bytes(),
-    );
-
+    let _ = scored_games_output_file.write(scored_game_header(&quiddler_game_letters).as_bytes());
     for game in scored_games {
-        let _ = scored_games_output_file.write(
-            double_letters::replace_all_double_letter_symbols(format!(
-                "Words: {} | Remaining Letters: {} | Score: {}\n",
-                game.words.join(","),
-                game.remaining_letters.join(","),
-                game.score.unwrap_or_default()
-            ))
-            .as_bytes(),
-        );
+        let _ = scored_games_output_file.write(scored_game_str(game).as_bytes());
     }
+}
+
+fn scored_game_header(letters: &QuiddlerLetters) -> String {
+    return format!(
+        "Quiddler Puzzle Letters: \nVisible | Hidden\n{} | {}\n{} | {}\n\n",
+        double_letters::replace_all_double_letter_symbols(
+            quiddler_parser::get_visible_letters_row(&letters.visible, 1)
+        ),
+        double_letters::replace_all_double_letter_symbols(
+            quiddler_parser::get_hidden_letters_row(&letters.hidden, 1)
+        ),
+        double_letters::replace_all_double_letter_symbols(
+            quiddler_parser::get_visible_letters_row(&letters.visible, 2)
+        ),
+        double_letters::replace_all_double_letter_symbols(
+            quiddler_parser::get_hidden_letters_row(&letters.hidden, 2)
+        )
+    );
+}
+
+fn scored_game_str(game: QuiddlerGame) -> String {
+    return double_letters::replace_all_double_letter_symbols(format!(
+        "Words: {} | Remaining Letters: {} | Score: {}\n",
+        game.words.join(","),
+        game.remaining_letters.join(","),
+        game.score.unwrap_or_default()
+    ));
 }
