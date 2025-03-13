@@ -75,26 +75,10 @@ fn main() {
     }
 
     // Scoring
+    println!("Calculating scores");
     let calculate_scores_start_time = std::time::Instant::now();
     let quiddler_games_file = std::fs::File::open(games_output_file_path).unwrap();
     let quiddler_game_bufreader = std::io::BufReader::new(quiddler_games_file);
-
-    let mut scored_games = vec![];
-
-    for line in quiddler_game_bufreader.lines() {
-        scored_games.push(game_scorer::calculate_game_score(
-            &quiddler_game_letter_scores,
-            &line.unwrap(),
-        ));
-    }
-
-    scored_games.sort_by(|a, b| (&b.score).cmp(&a.score));
-
-    let calculate_scores_time_elapsed = calculate_scores_start_time.elapsed();
-    println!(
-        "Calculated scores of {} games in {calculate_scores_time_elapsed:.6?}",
-        scored_games.len()
-    );
 
     let scored_games_output_file_path = "quiddler_games_scored";
     let mut scored_games_output_file = std::fs::OpenOptions::new()
@@ -103,11 +87,37 @@ fn main() {
         .truncate(true)
         .open(scored_games_output_file_path)
         .expect("Couldn't open output file `quiddler_games_scored`.");
-
     let _ = scored_games_output_file.write(scored_game_header(&quiddler_game_letters).as_bytes());
-    for game in scored_games {
-        let _ = scored_games_output_file.write(scored_game_str(game).as_bytes());
+
+    let mut scored_games = vec![];
+    let mut games_count = 0;
+
+    for line in quiddler_game_bufreader.lines() {
+        if !args.skip_sorting {
+            scored_games.push(game_scorer::calculate_game_score(
+                &quiddler_game_letter_scores,
+                &line.unwrap(),
+            ))
+        } else {
+            let scored_game =
+                game_scorer::calculate_game_score(&quiddler_game_letter_scores, &line.unwrap());
+            let _ = scored_games_output_file.write(scored_game_str(scored_game).as_bytes());
+        }
+        games_count += 1;
     }
+
+    if !args.skip_sorting {
+        scored_games.sort_by(|a, b| (&b.score).cmp(&a.score));
+        for game in scored_games {
+            let _ = scored_games_output_file.write(scored_game_str(game).as_bytes());
+        }
+    }
+
+    let calculate_scores_time_elapsed = calculate_scores_start_time.elapsed();
+    println!(
+        "Calculated and wrote scores of {} games in {calculate_scores_time_elapsed:.6?}",
+        games_count
+    );
 }
 
 fn scored_game_header(letters: &QuiddlerLetters) -> String {
