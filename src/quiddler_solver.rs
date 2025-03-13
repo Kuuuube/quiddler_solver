@@ -2,7 +2,7 @@ use std::io::Write;
 
 use crate::quiddler_parser::QuiddlerLetters;
 
-const USED_LETTER_PLACEHOLDER: &str = "-";
+const USED_LETTER_PLACEHOLDER: char = '-';
 const MAXIMUM_POSSIBLE_WORDCOUNT: i32 = 8;
 
 pub fn calculate_solutions(
@@ -14,7 +14,7 @@ pub fn calculate_solutions(
 ) {
     let possible_words = get_possible_words(&letters.visible, &dictionary);
     if current_wordcount >= MAXIMUM_POSSIBLE_WORDCOUNT || possible_words.len() == 0 {
-        if letters.visible.join("").replace("-", "").len() == 0 {
+        if letters.visible.clone().into_iter().filter(|x| x != &USED_LETTER_PLACEHOLDER).collect::<Vec<char>>().len() == 0 {
             let success_message = format!("{}|\n", previous_words.join(","));
             let _ = output_file.write(success_message.as_bytes());
         } else {
@@ -22,14 +22,12 @@ pub fn calculate_solutions(
                 letters.visible.clone(),
                 letters
                     .hidden
-                    .values()
-                    .map(String::from)
-                    .collect::<Vec<String>>(),
+                    .values().map(|x| x.to_owned()).collect::<Vec<char>>(),
             ]
             .concat()
             .iter()
-            .filter(|x| *x != "-")
-            .map(String::from)
+            .filter(|x| **x != '-')
+            .map(|x| x.to_string())
             .collect::<Vec<String>>()
             .join(",");
             let fail_message = format!("{}|{}\n", previous_words.join(","), remaining_letters,);
@@ -53,9 +51,9 @@ pub fn calculate_solutions(
             let visible_letter_index = working_letters
                 .visible
                 .iter()
-                .position(|x| *x == char.to_string())
+                .position(|x| x == &char)
                 .unwrap();
-            working_letters.visible[visible_letter_index] = USED_LETTER_PLACEHOLDER.to_string();
+            working_letters.visible[visible_letter_index] = USED_LETTER_PLACEHOLDER;
             working_letters = repopulate_visible_letters(working_letters);
         }
         calculate_solutions(
@@ -68,15 +66,16 @@ pub fn calculate_solutions(
     }
 }
 
-fn get_possible_words(visible_letters: &Vec<String>, dictionary: &Vec<String>) -> Vec<String> {
+fn get_possible_words(visible_letters: &Vec<char>, dictionary: &Vec<String>) -> Vec<String> {
     let mut new_dictionary = vec![];
 
     for word in dictionary {
         let mut working_word = word.clone();
         let mut letter_count = 0;
         for letter in visible_letters {
-            if working_word.contains(letter) {
-                working_word = working_word.replacen(letter, "", 1);
+            let deref_letter = *letter;
+            if working_word.contains(deref_letter) {
+                working_word = working_word.replacen(deref_letter, "", 1);
                 letter_count += 1;
             }
         }
@@ -91,20 +90,20 @@ fn repopulate_visible_letters(input_letters: QuiddlerLetters) -> QuiddlerLetters
     let mut output_letters = input_letters.clone();
     let mut i: usize = 0;
     while i < input_letters.visible.len() {
-        if input_letters.visible.get(i).unwrap() == USED_LETTER_PLACEHOLDER {
+        if *input_letters.visible.get(i).unwrap() == USED_LETTER_PLACEHOLDER {
             let hidden_letter = output_letters.hidden.get(&i);
             let mut indexes_to_remove = vec![];
             output_letters.visible[i] = match hidden_letter {
                 Some(some) => {
                     indexes_to_remove.push(i);
-                    some.to_string()
+                    *some
                 }
                 None => {
                     // Move hidden letter to spot without any cards on it
-                    let mut new_letter = "-".to_string();
+                    let mut new_letter = '-';
                     for (i, letter) in &output_letters.hidden {
                         indexes_to_remove.push(*i);
-                        new_letter = letter.to_string();
+                        new_letter = *letter;
                         break;
                     }
                     new_letter

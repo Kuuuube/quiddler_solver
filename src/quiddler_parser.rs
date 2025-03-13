@@ -45,18 +45,18 @@ pub fn get_quiddler_letters(quiddler_string: &str) -> QuiddlerLetters {
         .replace_all(quiddler_letters, ",")
         .into_owned();
 
-    let letters_vec: Vec<String> = remove_all(
+    let letters_vec: Vec<char> = remove_all(
         &filtered_letters_string,
         vec!["board.loadCards(", ")", "\\", "\""],
     )
     .to_lowercase()
     .split(",")
-    .map(|x| crate::double_letters::get_double_letter_symbol(x).to_string())
+    .map(|x| crate::double_letters::get_double_letter_symbol_char(x))
     .collect();
 
-    let mut hidden_letters_hashmap: HashMap<usize, String> = HashMap::new();
+    let mut hidden_letters_hashmap: HashMap<usize, char> = HashMap::new();
     for (i, letter) in letters_vec[8..=15].iter().enumerate() {
-        hidden_letters_hashmap.insert(i, letter.to_string());
+        hidden_letters_hashmap.insert(i, *letter);
     }
 
     return QuiddlerLetters {
@@ -99,23 +99,23 @@ pub fn remove_all(input_string: &str, strings_to_remove: Vec<&str>) -> String {
     return output_string;
 }
 
-pub fn get_visible_letters_row(visible_letters: &Vec<String>, row: i32) -> String {
+pub fn get_visible_letters_row(visible_letters: &Vec<char>, row: i32) -> String {
     return match row {
         1 => visible_letters[0..4]
             .iter()
-            .map(String::from)
+            .map(|x| x.to_string())
             .collect::<Vec<String>>()
             .join(" "),
         2 => visible_letters[4..8]
             .iter()
-            .map(String::from)
+            .map(|x| x.to_string())
             .collect::<Vec<String>>()
             .join(" "),
         _ => "".to_string(),
     };
 }
 
-pub fn get_hidden_letters_row(visible_letters: &HashMap<usize, String>, row: i32) -> String {
+pub fn get_hidden_letters_row(visible_letters: &HashMap<usize, char>, row: i32) -> String {
     return match row {
         1 => {
             let mut letters = vec![];
@@ -143,6 +143,6 @@ pub fn get_hidden_letters_row(visible_letters: &HashMap<usize, String>, row: i32
 
 #[derive(Debug, Clone)]
 pub struct QuiddlerLetters {
-    pub visible: Vec<String>,
-    pub hidden: HashMap<usize, String>,
+    pub visible: Vec<char>,
+    pub hidden: HashMap<usize, char>,
 }

@@ -25,11 +25,11 @@ fn main() {
     let quiddler_game_letters = quiddler_parser::get_quiddler_letters(&quiddler_game_init_str);
     println!(
         "Parsed Quiddler game Letters. Visible: {}. Hidden: {}.",
-        quiddler_game_letters.visible.join(","),
+        quiddler_game_letters.visible.iter().map(|x| x.to_string()).collect::<Vec<String>>().join(","),
         quiddler_game_letters
             .hidden
             .values()
-            .map(String::from)
+            .map(|x| x.to_string())
             .collect::<Vec<String>>()
             .join(",")
     );
