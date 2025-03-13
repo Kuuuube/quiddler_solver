@@ -116,15 +116,17 @@ fn scored_game_header(letters: &QuiddlerLetters) -> String {
         double_letters::replace_all_double_letter_symbols(
             quiddler_parser::get_visible_letters_row(&letters.visible, 1)
         ),
-        double_letters::replace_all_double_letter_symbols(
-            quiddler_parser::get_hidden_letters_row(&letters.hidden, 1)
-        ),
+        double_letters::replace_all_double_letter_symbols(quiddler_parser::get_hidden_letters_row(
+            &letters.hidden,
+            1
+        )),
         double_letters::replace_all_double_letter_symbols(
             quiddler_parser::get_visible_letters_row(&letters.visible, 2)
         ),
-        double_letters::replace_all_double_letter_symbols(
-            quiddler_parser::get_hidden_letters_row(&letters.hidden, 2)
-        )
+        double_letters::replace_all_double_letter_symbols(quiddler_parser::get_hidden_letters_row(
+            &letters.hidden,
+            2
+        ))
     );
 }
 
