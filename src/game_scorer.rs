@@ -33,8 +33,7 @@ pub fn calculate_game_score(
 fn get_game(game_string: &str) -> QuiddlerGame {
     let game_string_split = game_string.split_once("|").unwrap();
     let words = game_string_split.0.split(",").map(String::from).collect();
-    let remaining_letters: Vec<String> =
-        game_string_split.1.split(",").map(String::from).collect();
+    let remaining_letters: Vec<String> = game_string_split.1.split(",").map(String::from).collect();
 
     return QuiddlerGame {
         words,

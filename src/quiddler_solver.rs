@@ -14,7 +14,15 @@ pub fn calculate_solutions(
 ) {
     let possible_words = get_possible_words(&letters.visible, &dictionary);
     if current_wordcount >= MAXIMUM_POSSIBLE_WORDCOUNT || possible_words.len() == 0 {
-        if letters.visible.clone().into_iter().filter(|x| x != &USED_LETTER_PLACEHOLDER).collect::<Vec<char>>().len() == 0 {
+        if letters
+            .visible
+            .clone()
+            .into_iter()
+            .filter(|x| x != &USED_LETTER_PLACEHOLDER)
+            .collect::<Vec<char>>()
+            .len()
+            == 0
+        {
             let success_message = format!("{}|\n", previous_words.join(","));
             let _ = output_file.write(success_message.as_bytes());
         } else {
@@ -22,7 +30,9 @@ pub fn calculate_solutions(
                 letters.visible.clone(),
                 letters
                     .hidden
-                    .values().map(|x| x.to_owned()).collect::<Vec<char>>(),
+                    .values()
+                    .map(|x| x.to_owned())
+                    .collect::<Vec<char>>(),
             ]
             .concat()
             .iter()

@@ -1,10 +1,10 @@
 use std::io::{BufRead, Write};
 
+mod args_parser;
 mod double_letters;
 mod game_scorer;
 mod quiddler_parser;
 mod quiddler_solver;
-mod args_parser;
 
 fn main() {
     let args = args_parser::parse_args(std::env::args().collect());
@@ -29,7 +29,12 @@ fn main() {
     let quiddler_game_letters = quiddler_parser::get_quiddler_letters(&quiddler_game_init_str);
     println!(
         "Parsed Quiddler game Letters. Visible: {}. Hidden: {}.",
-        quiddler_game_letters.visible.iter().map(|x| x.to_string()).collect::<Vec<String>>().join(","),
+        quiddler_game_letters
+            .visible
+            .iter()
+            .map(|x| x.to_string())
+            .collect::<Vec<String>>()
+            .join(","),
         quiddler_game_letters
             .hidden
             .values()
@@ -45,28 +50,28 @@ fn main() {
     match args.skip_solving {
         true => {
             let mut games_output_file = std::fs::OpenOptions::new()
-            .create(true)
-            .write(true)
-            .truncate(true)
-            .open(games_output_file_path)
-            .expect("Couldn't open output file `quiddler_games`.");
+                .create(true)
+                .write(true)
+                .truncate(true)
+                .open(games_output_file_path)
+                .expect("Couldn't open output file `quiddler_games`.");
 
-        let calculate_solutions_start_time = std::time::Instant::now();
+            let calculate_solutions_start_time = std::time::Instant::now();
 
-        quiddler_solver::calculate_solutions(
-            &quiddler_game_letters,
-            &quiddler_game_dictionary,
-            0,
-            vec![],
-            &mut games_output_file,
-        );
+            quiddler_solver::calculate_solutions(
+                &quiddler_game_letters,
+                &quiddler_game_dictionary,
+                0,
+                vec![],
+                &mut games_output_file,
+            );
 
-        let calculate_solutions_time_elapsed = calculate_solutions_start_time.elapsed();
-        println!("Brute forced all solutions in: {calculate_solutions_time_elapsed:.6?}");
-        },
+            let calculate_solutions_time_elapsed = calculate_solutions_start_time.elapsed();
+            println!("Brute forced all solutions in: {calculate_solutions_time_elapsed:.6?}");
+        }
         false => {
             println!("Skipping solving. Attempting to use existing `quiddler_games` file.");
-        },
+        }
     }
 
     // Scoring
@@ -77,7 +82,10 @@ fn main() {
     let mut scored_games = vec![];
 
     for line in quiddler_game_bufreader.lines() {
-        scored_games.push(game_scorer::calculate_game_score(&quiddler_game_letter_scores, &line.unwrap()));
+        scored_games.push(game_scorer::calculate_game_score(
+            &quiddler_game_letter_scores,
+            &line.unwrap(),
+        ));
     }
 
     scored_games.sort_by(|a, b| (&b.score).cmp(&a.score));
