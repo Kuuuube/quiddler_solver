@@ -1,4 +1,4 @@
-use std::io::Write;
+use std::io::{BufRead, Write};
 
 mod double_letters;
 mod game_scorer;
@@ -9,6 +9,7 @@ mod args_parser;
 fn main() {
     let args = args_parser::parse_args(std::env::args().collect());
 
+    // Parsing
     let quiddler_game_html = std::fs::read_to_string("puzzle").unwrap();
 
     let quiddler_game_init_regex =
@@ -39,6 +40,7 @@ fn main() {
     let quiddler_game_letter_scores =
         quiddler_parser::get_quiddler_letter_scores(&quiddler_game_init_str);
 
+    // Solving
     let games_output_file_path = "quiddler_games";
     match args.skip_solving {
         true => {
@@ -67,9 +69,19 @@ fn main() {
         },
     }
 
+    // Scoring
     let calculate_scores_start_time = std::time::Instant::now();
-    let scored_games =
-        game_scorer::calculate_game_scores(quiddler_game_letter_scores, games_output_file_path);
+    let quiddler_games_file = std::fs::File::open(games_output_file_path).unwrap();
+    let quiddler_game_bufreader = std::io::BufReader::new(quiddler_games_file);
+
+    let mut scored_games = vec![];
+
+    for line in quiddler_game_bufreader.lines() {
+        scored_games.push(game_scorer::calculate_game_score(&quiddler_game_letter_scores, &line.unwrap()));
+    }
+
+    scored_games.sort_by(|a, b| (&b.score).cmp(&a.score));
+
     let calculate_scores_time_elapsed = calculate_scores_start_time.elapsed();
     println!(
         "Calculated scores of {} games in {calculate_scores_time_elapsed:.6?}",
