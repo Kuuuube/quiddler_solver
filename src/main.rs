@@ -47,31 +47,28 @@ fn main() {
 
     // Solving
     let games_output_file_path = "quiddler_games";
-    match args.skip_solving {
-        true => {
-            let mut games_output_file = std::fs::OpenOptions::new()
-                .create(true)
-                .write(true)
-                .truncate(true)
-                .open(games_output_file_path)
-                .expect("Couldn't open output file `quiddler_games`.");
+    if !args.skip_solving {
+        let mut games_output_file = std::fs::OpenOptions::new()
+            .create(true)
+            .write(true)
+            .truncate(true)
+            .open(games_output_file_path)
+            .expect("Couldn't open output file `quiddler_games`.");
 
-            let calculate_solutions_start_time = std::time::Instant::now();
+        let calculate_solutions_start_time = std::time::Instant::now();
 
-            quiddler_solver::calculate_solutions(
-                &quiddler_game_letters,
-                &quiddler_game_dictionary,
-                0,
-                vec![],
-                &mut games_output_file,
-            );
+        quiddler_solver::calculate_solutions(
+            &quiddler_game_letters,
+            &quiddler_game_dictionary,
+            0,
+            vec![],
+            &mut games_output_file,
+        );
 
-            let calculate_solutions_time_elapsed = calculate_solutions_start_time.elapsed();
-            println!("Brute forced all solutions in: {calculate_solutions_time_elapsed:.6?}");
-        }
-        false => {
-            println!("Skipping solving. Attempting to use existing `quiddler_games` file.");
-        }
+        let calculate_solutions_time_elapsed = calculate_solutions_start_time.elapsed();
+        println!("Brute forced all solutions in: {calculate_solutions_time_elapsed:.6?}");
+    } else {
+        println!("Skipping solving. Attempting to use existing `quiddler_games` file.");
     }
 
     // Scoring
