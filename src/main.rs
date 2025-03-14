@@ -11,6 +11,10 @@ mod quiddler_solver;
 
 fn main() {
     let args = args_parser::parse_args(std::env::args().collect());
+    if args.help {
+        println!("{}", include_str!("./args_help.txt"));
+        return;
+    }
 
     // Parsing
     let quiddler_game_html = std::fs::read_to_string("puzzle").unwrap();

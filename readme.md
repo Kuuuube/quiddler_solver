@@ -12,6 +12,8 @@ Brute forces all possible solutions of the [Quiddler Puzzle](https://www.setgame
 
 ## Args
 
+- `-h` `--help`: Prints a help message.
+
 - `--skip_solving`: Uses an existing `quiddler_games` file to generate scores from. Useful if you stop solving midway through and want to calculate scores for a partial set of games.
 
 - `--skip_sorting`: Reads back, scores, and outputs scored games buffered line by line. Useful for avoiding memory spikes from reading all games into memory.
