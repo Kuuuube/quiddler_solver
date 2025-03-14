@@ -2,7 +2,7 @@ pub fn parse_args(args: Vec<String>) -> QuiddlerSolverArgs {
     let mut quiddler_solver_args = QuiddlerSolverArgs::default();
 
     for arg in &args[1..] {
-        match arg.as_str() {
+        match arg.to_lowercase().as_str() {
             "-h" | "--help" => {
                 quiddler_solver_args.help = true;
                 return quiddler_solver_args
