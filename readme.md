@@ -16,7 +16,7 @@ Brute forces all possible solutions of the [Quiddler Puzzle](https://www.setgame
 
 - `--skip_solving`: Uses an existing `quiddler_games` file to generate scores from. Useful if you stop solving midway through and want to calculate scores for a partial set of games.
 
-- `--skip_sorting`: Reads back, scores, and outputs scored games buffered line by line. Useful for avoiding memory spikes from reading all games into memory.
+- `--skip_sorting`: Reads back scores and outputs scored games buffered line by line. Useful for avoiding memory spikes from reading all games into memory.
 
 - `--no_moving`: Prevents uncovering hidden cards when empty spaces are present. Disallowing moving can drastically cut down on the number of possible games and speed up calculation.
 
