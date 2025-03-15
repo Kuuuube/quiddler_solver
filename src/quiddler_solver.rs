@@ -114,8 +114,8 @@ fn repopulate_visible_letters(input_letters: QuiddlerLetters, no_moving: bool) -
                     // Move hidden letter to spot without any cards on it
                     let mut new_letter = '-';
                     if !no_moving {
-                        for (i, letter) in &output_letters.hidden {
-                            indexes_to_remove.push(*i);
+                        for (j, letter) in &output_letters.hidden {
+                            indexes_to_remove.push(*j);
                             new_letter = *letter;
                             break;
                         }
