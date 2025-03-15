@@ -65,8 +65,8 @@ pub fn calculate_solutions(
                 .position(|x| x == &char)
                 .unwrap();
             working_letters.visible[visible_letter_index] = USED_LETTER_PLACEHOLDER;
-            working_letters = repopulate_visible_letters(working_letters, no_moving);
         }
+        working_letters = repopulate_visible_letters(working_letters, no_moving);
         calculate_solutions(
             &working_letters,
             dictionary,
